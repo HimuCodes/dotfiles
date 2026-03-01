@@ -1,0 +1,115 @@
+# ============================================================================
+# Go — Primary language
+# ============================================================================
+[[language]]
+name = "go"
+auto-format = true
+formatter = { command = "goimports" }
+language-servers = ["gopls"]
+
+[language-server.gopls]
+command = "gopls"
+
+[language-server.gopls.config]
+gofumpt = true
+staticcheck = true
+
+[language-server.gopls.config.analyses]
+unusedparams = true
+shadow = true
+nilness = true
+unusedwrite = true
+useany = true
+unusedvariable = true
+
+[language-server.gopls.config.hints]
+assignVariableTypes = true
+compositeLiteralFields = true
+compositeLiteralTypes = true
+constantValues = true
+functionTypeParameters = true
+parameterNames = true
+rangeVariableTypes = true
+
+# ============================================================================
+# Go templates (HTML templates in Go projects)
+# ============================================================================
+[[language]]
+name = "gotmpl"
+auto-format = true
+language-servers = ["gopls"]
+
+# ============================================================================
+# Go mod files
+# ============================================================================
+[[language]]
+name = "gomod"
+auto-format = true
+language-servers = ["gopls"]
+
+# ============================================================================
+# Markdown
+# ============================================================================
+[[language]]
+name = "markdown"
+soft-wrap.enable = true
+
+# ============================================================================
+# TOML (for config files)
+# ============================================================================
+[[language]]
+name = "toml"
+auto-format = true
+
+# ============================================================================
+# JSON
+# ============================================================================
+[[language]]
+name = "json"
+auto-format = true
+
+# ============================================================================
+# YAML
+# ============================================================================
+[[language]]
+name = "yaml"
+auto-format = true
+
+# ============================================================================
+# Bash/Shell
+# ============================================================================
+[[language]]
+name = "bash"
+auto-format = false
+
+# ============================================================================
+# Dockerfile
+# ============================================================================
+[[language]]
+name = "dockerfile"
+auto-format = false
+
+# ============================================================================
+# Python (if you ever use it)
+# ============================================================================
+[[language]]
+name = "python"
+auto-format = true
+
+# ============================================================================
+# Rust (if you ever use it)
+# ============================================================================
+[[language]]
+name = "rust"
+auto-format = true
+
+# ============================================================================
+# TypeScript / JavaScript (if you ever use it)
+# ============================================================================
+[[language]]
+name = "typescript"
+auto-format = true
+
+[[language]]
+name = "javascript"
+auto-format = true

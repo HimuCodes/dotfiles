@@ -1,0 +1,140 @@
+theme = "gruvbox"
+
+[editor]
+line-number = "relative"
+mouse = true
+cursorline = true
+color-modes = true
+true-color = true
+idle-timeout = 200
+completion-trigger-len = 1
+bufferline = "multiple"
+auto-format = true
+scrolloff = 8
+rulers = [80, 120]
+gutters = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
+popup-border = "all"
+jump-label-alphabet = "tsraneiogmdhcbfpwvulyjkqxz"
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.file-picker]
+hidden = false
+git-ignore = true
+max-depth = 8
+
+[editor.statusline]
+left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control"]
+center = ["diagnostics"]
+right = ["selections", "register", "position", "position-percentage", "file-encoding", "file-type"]
+separator = "│"
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+auto-signature-help = true
+snippets = true
+
+[editor.indent-guides]
+render = true
+character = "┊"
+skip-levels = 1
+
+[editor.soft-wrap]
+enable = true
+
+[editor.smart-tab]
+enable = true
+supersede-menu = true
+
+[editor.search]
+smart-case = true
+wrap-around = true
+
+[editor.whitespace.render]
+tab = "all"
+nbsp = "all"
+
+[editor.inline-diagnostics]
+cursor-line = "hint"
+other-lines = "error"
+
+# ============================================================================
+# CUSTOM KEYBINDINGS
+# ============================================================================
+# Safe keys — verified against:
+#   Hyprland: Super + *         (never conflicts, helix can't see Super)
+#   Tmux:     Ctrl-Space + *    (prefix-based, no conflict)
+#   Tmux:     Alt-1..9          (window switch — avoid in helix)
+#   Tmux:     Alt-arrows        (session/window nav — avoid in helix)
+#   Tmux:     Ctrl-Alt-arrows   (pane nav — avoid in helix)
+#   Omarchy:  Alt-Tab           (window cycle — avoid in helix)
+# ============================================================================
+
+[keys.normal]
+# Quick save — Ctrl-s is universal muscle memory, no conflicts
+C-s = ":write"
+
+# Better line selection — X extends up (like Kakoune)
+X = ["extend_line_up", "extend_to_line_bounds"]
+
+# Center screen after jumps
+C-d = ["half_page_down", "align_view_center"]
+C-u = ["half_page_up", "align_view_center"]
+n = ["search_next", "align_view_center"]
+N = ["search_prev", "align_view_center"]
+
+# Quick buffer close — Ctrl-w alone is free (Ctrl-w + key is splits)
+C-q = ":buffer-close"
+
+# Undo/redo convenience
+U = "redo"
+
+[keys.normal.space]
+# File operations
+w = ":write"
+W = ":write-all"
+q = ":buffer-close"
+Q = ":quit!"
+
+# Diagnostics navigation
+"[" = "goto_prev_diag"
+"]" = "goto_next_diag"
+e = "goto_next_diag"
+E = "goto_prev_diag"
+
+# Git
+g = { s = ":sh lazygit", d = ":sh git diff", l = ":sh git log --oneline -20", b = ":sh git blame %" }
+
+# Quick toggles
+i = ":toggle lsp.display-inlay-hints"
+n = ":toggle line-number absolute relative"
+
+# Yank to system clipboard
+y = ":clipboard-yank"
+p = ":clipboard-paste-after"
+P = ":clipboard-paste-before"
+
+# Open terminal pane (use tmux split instead of helix shell)
+t = ":sh tmux split-window -v -p 30 -c '#{pane_current_path}'"
+
+[keys.normal.space.l]
+# LSP submenu
+r = ":lsp-restart"
+f = ":format"
+
+[keys.insert]
+# Quick escape to normal mode
+j = { k = "normal_mode" }
+
+# Save from insert mode
+C-s = ["normal_mode", ":write"]
+
+[keys.select]
+X = ["extend_line_up", "extend_to_line_bounds"]
