@@ -431,8 +431,11 @@ fd -e go | entr -r go run .
 #### `atuin` — Never Lose a Command Again
 ```bash
 # After install, init in your shell:
-# Add to ~/.zshrc:
+# For zsh — add to ~/.zshrc:
 eval "$(atuin init zsh)"
+
+# For bash — add to ~/.bashrc:
+eval "$(atuin init bash)"
 
 # Then Ctrl-r gives you fuzzy-searchable history
 # across all terminals, all sessions, all time
@@ -483,8 +486,8 @@ fd -e go | entr -c go test ./... 2>&1 | head -20
 | `~/.config/tmux/tmux.conf` | Tmux settings |
 | `~/.config/hypr/bindings.conf` | Your Hyprland keybindings |
 | `~/.config/starship.toml` | Shell prompt |
-| `~/.bashrc` | Bash config (aliases, exports) |
-| `~/.zshrc` | Zsh config (after switching) |
+| `~/.bashrc` | Bash config (Omarchy default, aliases, exports) |
+| `~/.zshrc` | Zsh config (interactive shell — aliases, tools, prompt) |
 
 ---
 
@@ -532,6 +535,88 @@ helix --health typescript
 
 ---
 
+## Zsh on Omarchy
+
+Omarchy ships with bash, but zsh works great as your interactive shell.
+
+### How It Works
+
+- **Login shell**: Your login shell is set to zsh (`chsh -s /usr/bin/zsh`)
+- **Terminal**: Ghostty is configured to launch zsh (`command = /usr/bin/zsh` in `~/.config/ghostty/config`)
+- **Boot chain**: Hyprland launches via `uwsm` (a compiled binary) — it doesn't depend on bash as your login shell
+- **Omarchy internals**: The `~/.config/uwsm/env` file handles session environment (PATH, mise) independently of your shell
+
+### What NOT to Do
+
+| Don't | Why |
+|-------|-----|
+| `source ~/.local/share/omarchy/default/bash/rc` in `.zshrc` | Runs `starship init bash` which outputs `\[\]` escape garbage in zsh |
+| `source ~/.local/share/omarchy/default/bash/shell` in `.zshrc` | Uses `shopt` (bash-only builtin), will error |
+| `source ~/.local/share/omarchy/default/bash/init` in `.zshrc` | Runs `bind -f` (bash-only), inits tools in bash mode |
+
+### What TO Do
+
+Cherry-pick the compatible parts and init tools in zsh mode:
+
+```zsh
+# Omarchy environment (same vars as bash)
+export OMARCHY_PATH=$HOME/.local/share/omarchy
+export PATH=$OMARCHY_PATH/bin:$PATH:$HOME/.local/bin
+export BAT_THEME=ansi
+
+# Omarchy aliases & functions (zsh-compatible, safe to source)
+source ~/.local/share/omarchy/default/bash/aliases 2>/dev/null
+for f in $OMARCHY_PATH/default/bash/fns/*; do source "$f" 2>/dev/null; done
+
+# Init tools in ZSH mode (not bash mode!)
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+eval "$(mise activate zsh)"
+source <(fzf --zsh)
+```
+
+### Zsh-Specific Features You Get
+
+| Feature | What It Does |
+|---------|--------------|
+| `setopt AUTO_CD` | Type a directory name to `cd` into it (no `cd` needed) |
+| `setopt CORRECT` | Suggests spelling fixes for mistyped commands |
+| `setopt SHARE_HISTORY` | History shared across all terminal sessions in real-time |
+| Tab completion menus | `autoload -Uz compinit && compinit` — interactive menu completion |
+| `bindkey '^[[A'` | Up arrow searches history matching what you've typed so far |
+| Glob qualifiers | `ls *(.)` (files only), `ls *(/)` (dirs only), `ls *(.om[1,5])` (5 newest files) |
+| `**/*.go` | Recursive globbing built-in (no `find` needed) |
+
+### Useful Zsh Tricks
+
+```zsh
+# Glob qualifiers — filter files without find
+ls **/*.go              # all Go files recursively
+ls *(.)                 # only files (not dirs) in current dir
+ls *(/)                 # only directories
+ls *(.om[1,5])          # 5 most recently modified files
+ls *(.Lm+10)            # files larger than 10MB
+
+# Quick substitution in last command
+# Ran: go test -run TestOld
+^Old^New                # reruns as: go test -run TestNew
+
+# Expand aliases before running (to see what they do)
+# Type the alias, then press Ctrl-x a
+ls<Ctrl-x a>            # expands to: eza -lh --group-directories-first --icons=auto
+
+# Suffix aliases — open files by extension
+alias -s go=hx          # typing "main.go" opens it in helix
+alias -s md=bat          # typing "README.md" runs bat on it
+
+# Global aliases — expand anywhere in a command
+alias -g G='| rg'        # ls G pattern  →  ls | rg pattern
+alias -g L='| less'      # cat file G err  →  cat file | rg err
+alias -g C='| wl-copy'   # echo foo C  →  echo foo | wl-copy
+```
+
+---
+
 ## Omarchy-Specific Gotchas
 
 | Problem | Cause | Fix |
@@ -541,6 +626,7 @@ helix --health typescript
 | Clipboard doesn't paste in helix | Different clipboard path | Use `Space y` / `Space p` (custom bindings) |
 | Theme looks wrong | Terminal issue | `true-color = true` already set |
 | `n` alias conflicts | Omarchy aliases `n` to nvim | Override in .bashrc/.zshrc if needed |
+| `\[\]` garbage in zsh prompt | Sourcing Omarchy's `bash/rc` in zsh | Don't source it — cherry-pick aliases + init tools in zsh mode |
 
 ---
 

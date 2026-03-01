@@ -31,4 +31,28 @@ bindkey -e
 bindkey '^[[A' history-search-backward
 bindkey '^[[B' history-search-forward
 
-source ~/.local/share/omarchy/default/bash/rc 2>/dev/null
+# Omarchy environment
+export OMARCHY_PATH=$HOME/.local/share/omarchy
+export PATH=$OMARCHY_PATH/bin:$PATH:$HOME/.local/bin
+export BAT_THEME=ansi
+
+# Omarchy aliases & functions (zsh-compatible)
+source ~/.local/share/omarchy/default/bash/aliases 2>/dev/null
+for f in $OMARCHY_PATH/default/bash/fns/*; do source "$f" 2>/dev/null; done
+
+# Tool initialization (zsh mode)
+if command -v starship &> /dev/null; then
+  eval "$(starship init zsh)"
+fi
+
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+fi
+
+if command -v mise &> /dev/null; then
+  eval "$(mise activate zsh)"
+fi
+
+if command -v fzf &> /dev/null; then
+  source <(fzf --zsh) 2>/dev/null
+fi
