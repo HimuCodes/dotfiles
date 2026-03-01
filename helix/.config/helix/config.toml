@@ -6,13 +6,13 @@ mouse = true
 cursorline = true
 color-modes = true
 true-color = true
-idle-timeout = 200
+idle-timeout = 400
 completion-trigger-len = 1
 bufferline = "multiple"
 auto-format = true
 scrolloff = 8
-rulers = [80, 120]
-gutters = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
+
+gutters = ["diagnostics", "diff", "spacer", "line-numbers", "spacer"]
 popup-border = "all"
 jump-label-alphabet = "tsraneiogmdhcbfpwvulyjkqxz"
 
@@ -22,7 +22,7 @@ normal = "block"
 select = "underline"
 
 [editor.file-picker]
-hidden = false
+hidden = true
 git-ignore = true
 max-depth = 8
 
@@ -37,7 +37,7 @@ mode.select = "SELECT"
 
 [editor.lsp]
 display-messages = true
-display-inlay-hints = true
+display-inlay-hints = false
 auto-signature-help = true
 snippets = true
 
@@ -51,15 +51,11 @@ enable = true
 
 [editor.smart-tab]
 enable = true
-supersede-menu = true
+supersede-menu = false
 
 [editor.search]
 smart-case = true
 wrap-around = true
-
-[editor.whitespace.render]
-tab = "all"
-nbsp = "all"
 
 [editor.inline-diagnostics]
 cursor-line = "hint"
@@ -128,6 +124,14 @@ t = ":sh tmux split-window -v -p 30 -c '#{pane_current_path}'"
 # LSP submenu
 r = ":lsp-restart"
 f = ":format"
+a = "code_action"
+R = "rename_symbol"
+d = "goto_definition"
+D = "goto_declaration"
+i = "goto_implementation"
+t = "goto_type_definition"
+s = "signature_help"
+h = "hover"
 
 [keys.insert]
 # Quick escape to normal mode

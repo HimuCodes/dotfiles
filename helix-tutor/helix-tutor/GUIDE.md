@@ -168,6 +168,14 @@ These are verified conflict-free with Omarchy + Tmux:
 | `Space g b` | Normal | Git blame current file |
 | `Space l r` | Normal | Restart LSP |
 | `Space l f` | Normal | Format file |
+| `Space l a` | Normal | Code action |
+| `Space l R` | Normal | Rename symbol |
+| `Space l d` | Normal | Go to definition |
+| `Space l D` | Normal | Go to declaration |
+| `Space l i` | Normal | Go to implementation |
+| `Space l t` | Normal | Go to type definition |
+| `Space l s` | Normal | Signature help |
+| `Space l h` | Normal | Hover docs |
 
 ### Default Helix Commands Reference
 

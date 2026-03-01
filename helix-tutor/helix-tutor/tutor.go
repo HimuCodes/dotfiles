@@ -31,6 +31,14 @@
 //   Space t    = open terminal (tmux split below)
 //   Space l r  = restart LSP
 //   Space l f  = format file
+//   Space l a  = code action
+//   Space l R  = rename symbol
+//   Space l d  = goto definition
+//   Space l D  = goto declaration
+//   Space l i  = goto implementation
+//   Space l t  = goto type definition
+//   Space l s  = signature help
+//   Space l h  = hover docs
 //
 // ============================================================================
 
@@ -274,6 +282,13 @@ func lesson7MultiCursor() {
 //   Space g b = git blame current file
 //   Space l r = restart LSP
 //   Space l f = format file
+//   Space l a = code action
+//   Space l R = rename symbol
+//   Space l d/D = goto definition/declaration
+//   Space l i = goto implementation
+//   Space l t = goto type definition
+//   Space l s = signature help
+//   Space l h = hover docs
 //
 // TASK: Try Space then look at the menu. Press Escape to cancel.
 // Then try Space f to browse files.
@@ -437,6 +452,14 @@ func lesson13Registers() {
 //   Space E   = prev diagnostic (custom)
 //   Space l r = restart LSP (custom)
 //   Space l f = format file (custom)
+//   Space l a = code action (custom)
+//   Space l R = rename symbol (custom)
+//   Space l d = goto definition (custom)
+//   Space l D = goto declaration (custom)
+//   Space l i = goto implementation (custom)
+//   Space l t = goto type definition (custom)
+//   Space l s = signature help (custom)
+//   Space l h = hover docs (custom)
 //
 // Inlay hints show parameter names and types inline!
 // Toggle them with Space i (custom)

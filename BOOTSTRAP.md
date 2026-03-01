@@ -177,7 +177,7 @@ PACKAGES=(
 
 2. Add to `STOW_PACKAGES` in `bootstrap.sh`:
    ```bash
-   STOW_PACKAGES=(bash zsh helix tmux starship hypr ssh helix-tutor myapp)
+   STOW_PACKAGES=(bash zsh helix tmux starship hypr ssh myapp)
    ```
 
 3. Test: `cd ~/dotfiles && stow -n -v myapp` (`-n` = dry run)
@@ -272,7 +272,7 @@ eval "$(zoxide init zsh)"
 eval "$(mise activate zsh)"
 ```
 
-See the "Zsh on Omarchy" section in `~/helix-tutor/GUIDE.md` for full details.
+See the "Zsh on Omarchy" section in the helix-tutor GUIDE for full details.
 
 ### Ghostty Not Using zsh
 

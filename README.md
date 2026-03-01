@@ -21,7 +21,7 @@ Or see [BOOTSTRAP.md](BOOTSTRAP.md) for the full walkthrough.
 | `starship` | `~/.config/starship.toml` — cross-shell prompt |
 | `hypr` | `~/.config/hypr/` — Hyprland WM, bindings, shaders |
 | `ssh` | `~/.ssh/config` — SSH client config, 1Password agent |
-| `helix-tutor` | `~/helix-tutor/` — interactive helix learning files |
+| `helix-tutor` | `~/helix-tutor/` — Helix editor tutorial + GUIDE.md |
 
 ## Quick Start
 
@@ -88,7 +88,7 @@ git add -A && git commit -m "add alacritty config"
 
 ```bash
 cd ~/dotfiles
-stow -D helix-tutor   # removes symlinks, doesn't delete files
+stow -D <package>   # removes symlinks, doesn't delete files
 ```
 
 ## Resolving Conflicts

@@ -18,3 +18,7 @@ alias hx='helix'
 
 . "$HOME/.local/share/../bin/env"
 . "$HOME/.cargo/env"
+
+if command -v atuin &> /dev/null; then
+  eval "$(atuin init bash)"
+fi

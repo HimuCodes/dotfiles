@@ -46,7 +46,7 @@ if command -v starship &> /dev/null; then
 fi
 
 if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init zsh)"
+  eval "$(zoxide init zsh --cmd cd)"
 fi
 
 if command -v mise &> /dev/null; then
@@ -55,4 +55,8 @@ fi
 
 if command -v fzf &> /dev/null; then
   source <(fzf --zsh) 2>/dev/null
+fi
+
+if command -v atuin &> /dev/null; then
+  eval "$(atuin init zsh)"
 fi

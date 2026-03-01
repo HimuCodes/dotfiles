@@ -23,13 +23,13 @@ useany = true
 unusedvariable = true
 
 [language-server.gopls.config.hints]
-assignVariableTypes = true
-compositeLiteralFields = true
-compositeLiteralTypes = true
+assignVariableTypes = false
+compositeLiteralFields = false
+compositeLiteralTypes = false
 constantValues = true
-functionTypeParameters = true
+functionTypeParameters = false
 parameterNames = true
-rangeVariableTypes = true
+rangeVariableTypes = false
 
 # ============================================================================
 # Go templates (HTML templates in Go projects)
