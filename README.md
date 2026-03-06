@@ -17,6 +17,7 @@ Or see [BOOTSTRAP.md](BOOTSTRAP.md) for the full walkthrough.
 | `bash` | `~/.bashrc` — shell config, aliases, exports |
 | `zsh` | `~/.zshrc` — zsh config, prompt, history, completions |
 | `helix` | `~/.config/helix/` — editor config + language servers |
+| `yazi` | `~/.config/yazi/` — file manager config (integrates with helix) |
 | `tmux` | `~/.config/tmux/tmux.conf` — terminal multiplexer |
 | `starship` | `~/.config/starship.toml` — cross-shell prompt |
 | `hypr` | `~/.config/hypr/` — Hyprland WM, bindings, shaders |
@@ -46,7 +47,7 @@ cd ~/dotfiles
 yay -S stow
 git clone git@github.com:HimuCodes/dotfiles.git ~/dotfiles
 cd ~/dotfiles
-stow bash zsh helix tmux starship hypr ssh helix-tutor
+stow bash zsh helix yazi tmux starship hypr ssh helix-tutor
 ```
 
 ## How Stow Works
@@ -111,6 +112,8 @@ cd ~/dotfiles && stow helix
 - **Terminal**: Ghostty
 - **Shell**: zsh (with bash fallback for Omarchy internals)
 - **Editor**: Helix
+- **File Manager**: Yazi (integrated in helix via `Space o`)
+- **Git TUI**: Lazygit (integrated in helix via `Space g s`)
 - **Multiplexer**: tmux (prefix: Ctrl-Space)
 - **Prompt**: Starship
 - **Runtimes**: mise (Go, Node, Python) + rustup (Rust)

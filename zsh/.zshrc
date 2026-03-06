@@ -40,6 +40,8 @@ export BAT_THEME=ansi
 source ~/.local/share/omarchy/default/bash/aliases 2>/dev/null
 for f in $OMARCHY_PATH/default/bash/fns/*; do source "$f" 2>/dev/null; done
 
+alias virt-manager='/usr/bin/python3 /usr/bin/virt-manager'
+
 # Tool initialization (zsh mode)
 if command -v starship &> /dev/null; then
   eval "$(starship init zsh)"

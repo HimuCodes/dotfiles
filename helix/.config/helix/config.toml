@@ -105,9 +105,6 @@ Q = ":quit!"
 e = "goto_next_diag"
 E = "goto_prev_diag"
 
-# Git
-g = { s = ":sh lazygit", d = ":sh git diff", l = ":sh git log --oneline -20", b = ":sh git blame %" }
-
 # Quick toggles
 i = ":toggle lsp.display-inlay-hints"
 n = ":toggle line-number absolute relative"
@@ -117,8 +114,35 @@ y = ":clipboard-yank"
 p = ":clipboard-paste-after"
 P = ":clipboard-paste-before"
 
-# Open terminal pane (use tmux split instead of helix shell)
+# Open terminal pane (tmux only)
 t = ":sh tmux split-window -v -p 30 -c '#{pane_current_path}'"
+
+# Yazi file manager (works with or without tmux)
+o = [
+  ':sh rm -f /tmp/helix-yazi-chooser',
+  ':sh rm -f /tmp/helix-yazi-cwd',
+  ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/helix-yazi-chooser --cwd-file=/tmp/helix-yazi-cwd',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/helix-yazi-chooser}',
+  ':cd %sh{cat /tmp/helix-yazi-cwd}',
+  ':redraw',
+  ':set-option mouse false',
+  ':set-option mouse true',
+]
+
+# Git submenu
+[keys.normal.space.g]
+s = [
+  ':insert-output lazygit',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':redraw',
+  ':reload-all',
+  ':set-option mouse false',
+  ':set-option mouse true',
+]
+d = ":sh git diff"
+l = ":sh git log --oneline -20"
+b = ":sh git blame %%"
 
 [keys.normal.space.l]
 # LSP submenu

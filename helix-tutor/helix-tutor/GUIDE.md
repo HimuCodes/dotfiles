@@ -161,8 +161,9 @@ These are verified conflict-free with Omarchy + Tmux:
 | `Space P` | Normal | Paste before from clipboard |
 | `Space i` | Normal | Toggle inlay hints |
 | `Space n` | Normal | Toggle relative/absolute line numbers |
+| `Space o` | Normal | Open yazi file manager (works with or without tmux) |
 | `Space t` | Normal | Open terminal below (tmux split) |
-| `Space g s` | Normal | Open lazygit |
+| `Space g s` | Normal | Open lazygit (direct integration, no tmux needed) |
 | `Space g d` | Normal | Git diff |
 | `Space g l` | Normal | Git log (20 commits) |
 | `Space g b` | Normal | Git blame current file |
@@ -299,6 +300,122 @@ These are verified conflict-free with Omarchy + Tmux:
 
 ---
 
+## Yazi File Manager Integration
+
+Yazi runs **directly inside Helix** — no tmux or zellij required. Works in Ghostty, any terminal, with or without tmux.
+
+### How It Works
+
+Press `Space o` and yazi opens full-screen over helix. Browse, preview files (including images/videos in supported terminals), select a file, and it opens in helix. Your working directory follows yazi's navigation.
+
+The integration uses `:insert-output` to launch yazi inline, then restores the terminal with ANSI escape sequences. No external scripts needed.
+
+### Usage
+
+| Key | Action |
+|-----|--------|
+| `Space o` | Open yazi at current file's location |
+| `Enter` | Open selected file in helix |
+| `q` | Quit yazi without opening anything |
+| `Tab` | Toggle selection (multi-select) |
+| `~` | Go to home directory |
+| `.` | Toggle hidden files |
+| `/` | Search in current directory |
+
+### Requirements
+
+- **Helix 25.01.1+** (you have 25.07.1 — command-line expansions supported)
+- **Yazi** with `--chooser-file` support
+- No tmux, zellij, or external scripts needed
+
+### Config (already set up)
+
+```toml
+# In ~/.config/helix/config.toml under [keys.normal.space]
+o = [
+  ':sh rm -f /tmp/helix-yazi-chooser',
+  ':sh rm -f /tmp/helix-yazi-cwd',
+  ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/helix-yazi-chooser --cwd-file=/tmp/helix-yazi-cwd',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/helix-yazi-chooser}',
+  ':cd %sh{cat /tmp/helix-yazi-cwd}',
+  ':redraw',
+  ':set-option mouse false',
+  ':set-option mouse true',
+]
+```
+
+### Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| "no current client" | You were using `tmux popup` — the new config doesn't need tmux |
+| Mouse scroll broken after yazi | Fixed by mouse toggle at end of keybinding |
+| Screen artifacts after quitting helix | Uses `printf` to `/dev/tty` instead of `insert-output echo` |
+| Paths with parentheses (Next.js) | Wrap `%{buffer_name}` in single quotes in the config |
+| Opens empty `/tmp/helix-yazi-chooser` | Upgrade helix to 25.01.1+ (needs command-line expansions) |
+
+### Credits
+
+Direct integration method by [sxyazi](https://github.com/sxyazi) (yazi author) — [helix#12934](https://github.com/helix-editor/helix/discussions/12934), [yazi#2461](https://github.com/sxyazi/yazi/pull/2461).
+
+---
+
+## Lazygit Integration
+
+Lazygit also runs **directly inside Helix** using the same `:insert-output` technique. No tmux popups, no external scripts.
+
+### Usage
+
+| Key | Action |
+|-----|--------|
+| `Space g s` | Open lazygit (stage, commit, push, rebase — full git TUI) |
+| `Space g d` | Quick git diff in helix |
+| `Space g l` | Git log (last 20 commits) |
+| `Space g b` | Git blame current file |
+
+### How It Works
+
+Press `Space g s` and lazygit takes over the terminal. Do your git work (stage files, write commits, push, interactive rebase, whatever). Press `q` to quit lazygit and you're back in helix with all buffers reloaded to pick up any changes.
+
+### Config (already set up)
+
+```toml
+# In ~/.config/helix/config.toml
+[keys.normal.space.g]
+s = [
+  ':insert-output lazygit',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':redraw',
+  ':reload-all',
+  ':set-option mouse false',
+  ':set-option mouse true',
+]
+d = ":sh git diff"
+l = ":sh git log --oneline -20"
+b = ":sh git blame %%"
+```
+
+### The `lavafroth` Alternative
+
+A simpler approach using a scratch buffer ([gist](https://gist.github.com/lavafroth/c5b01984fcd58f26911bd42e43d29289)):
+
+```toml
+C-g = [":new", ":insert-output lazygit", ":buffer-close!", ":redraw"]
+```
+
+This opens a new buffer, runs lazygit in it, then closes the buffer on exit. Simpler but doesn't restore terminal state as cleanly.
+
+### Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| Helix commands replaced by lazygit's after exit | The escape sequence reset (`printf` line) fixes this |
+| File changes not reflected after commit | `:reload-all` in the keybinding handles this |
+| Mouse broken after lazygit | Mouse toggle at end of keybinding fixes this |
+
+---
+
 ## Recommended Workflows
 
 ### Workflow 1: Quick Edit
@@ -351,6 +468,30 @@ Ctrl-w v                          # side-by-side view
 ga                                # toggle between last 2 files
 ```
 
+### Workflow 6: File Browsing with Yazi
+
+```
+# From inside helix:
+Space o                            # opens yazi at current file
+# Browse directories, preview files
+# Press Enter to open a file in helix
+# Press q to cancel and return to helix
+```
+
+### Workflow 7: Git Flow Without Leaving Helix
+
+```
+# Stage, commit, push — all from helix:
+Space g s                          # lazygit opens inline
+# Stage files, write commit, push
+# Press q — back in helix, buffers auto-reloaded
+
+# Quick checks without lazygit:
+Space g d                          # git diff
+Space g l                          # git log
+Space g b                          # git blame current file
+```
+
 ---
 
 ## Essential CLI Tools
@@ -368,7 +509,8 @@ ga                                # toggle between last 2 files
 | `dust` | Better `du` | `dust` — visual disk usage |
 | `tldr` | Better `man` | `tldr tar` — practical examples |
 | `jq` | JSON processor | `cat data.json \| jq '.name'` |
-| `lazygit` | Git TUI | `lazygit` or `Space g s` in helix |
+| `lazygit` | Git TUI | `lazygit` or `Space g s` in helix (direct integration) |
+| `yazi` | File manager TUI | `yazi` or `Space o` in helix (direct integration) |
 | `lazydocker` | Docker TUI | `lazydocker` or `Super+Shift+D` |
 | `btop` | System monitor | `btop` or `Super+Ctrl+T` |
 | `mise` | Tool versioner | Manages Go, Node, Python versions |
@@ -491,6 +633,9 @@ fd -e go | entr -c go test ./... 2>&1 | head -20
 |------|---------|
 | `~/.config/helix/config.toml` | Helix editor settings + keybindings |
 | `~/.config/helix/languages.toml` | LSP and language config |
+| `~/.config/yazi/yazi.toml` | Yazi file manager settings |
+| `~/.config/yazi/keymap.toml` | Yazi keybindings |
+| `~/.config/yazi/theme.toml` | Yazi theme |
 | `~/.config/tmux/tmux.conf` | Tmux settings |
 | `~/.config/hypr/bindings.conf` | Your Hyprland keybindings |
 | `~/.config/starship.toml` | Shell prompt |
