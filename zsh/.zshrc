@@ -62,3 +62,10 @@ fi
 if command -v atuin &> /dev/null; then
   eval "$(atuin init zsh)"
 fi
+
+# bun completions
+[ -s "/home/audbhida/.bun/_bun" ] && source "/home/audbhida/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

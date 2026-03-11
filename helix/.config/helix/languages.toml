@@ -13,6 +13,8 @@ command = "gopls"
 [language-server.gopls.config]
 gofumpt = true
 staticcheck = true
+usePlaceholders = false
+importShortcut = "Both"
 
 [language-server.gopls.config.analyses]
 unusedparams = true
